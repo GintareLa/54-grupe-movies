@@ -4,8 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "node --watch ./src/index.js",
-    "prod": "node ./src/index.js",
+    "dev": "node --watch ./src/index.js --env=.env.development",
+    "prod": "node ./src/index.js --env=.env.production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,6 +14,7 @@
   "description": "",
   "dependencies": {
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mysql2": "^3.14.1"
   }
 }
