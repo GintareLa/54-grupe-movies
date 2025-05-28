@@ -1,5 +1,5 @@
 
-import { getAllMovies } from "../../db/getAllMovies.js";
+import { getAllMovies } from "../../db/public/movies.js";
 import { formatMovieDuration } from "../../lib/formatMovieDuration.js";
 import { PageTemplate } from "../../templates/PageTemplate.js";
 
@@ -9,30 +9,28 @@ export class PageMovies extends PageTemplate {
         this.activeMenuIndex = 1;
     }
 
-    async moviesList(category) {
+    async moviesList() {
         let HTML = '';
 
         const moviesData = await getAllMovies();
 
         for (const item of moviesData) {
-            if (item.category.toLowerCase() === category || category === '') {
-                HTML += `
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            <img src="/img/movie-thumbnails/${item.thumbnail}" class="movie-card-thumbnail card-img-top" style="height: 225px;">
-                            <div class="card-body">
-                                <a href="/movies/${item.url_slug}" class="h4">${item.title}</a>
-                                <p class="card-text">${item.description}</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <a href="/movies/${item.url_slug}" class="btn btn-sm btn-outline-secondary">Read more</a>
-                                    </div>
-                                    <small class="text-body-secondary">${formatMovieDuration(item.duration)}</small>
+            HTML += `
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img src="/img/movie-thumbnails/${item.thumbnail}" class="movie-card-thumbnail card-img-top" style="height: 225px;">
+                        <div class="card-body">
+                            <a href="/movies/${item.url_slug}" class="h4">${item.title}</a>
+                            <p class="card-text">${item.description}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a href="/movies/${item.url_slug}" class="btn btn-sm btn-outline-secondary">Read more</a>
                                 </div>
+                                <small class="text-body-secondary">${formatMovieDuration(item.duration)}</small>
                             </div>
                         </div>
-                    </div>`;
-            }
+                    </div>
+                </div>`;
         }
 
         if (HTML) {
@@ -54,26 +52,16 @@ export class PageMovies extends PageTemplate {
     }
 
     async main() {
-        let category = '';
-
-        if (this.req?.params?.categoryName) {
-            category = this.req.params.categoryName;
-        }
-
-        const title = category
-            ? (category[0].toUpperCase() + category.slice(1))
-            : 'All movies';
-
         return `
             <main>
                 <div class="container">
                     <div class="row">
                         <div class="col-12">
-                            <h1 class="display-1">${title}</h1>
+                            <h1 class="display-1">All movies</h1>
                         </div>
                     </div>
                 </div>
-                ${await this.moviesList(category)}
+                ${await this.moviesList()}
             </main>`;
     }
 }
