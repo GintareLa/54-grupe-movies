@@ -1,6 +1,6 @@
 
-import { connection } from "../db.js";
-import { IsValid } from "../lib/IsValid.js";
+import { connection } from "../../db.js";
+import { IsValid } from "../../lib/IsValid.js";
 
 export async function apiRegister(req, res) {
     const [err, msg] = IsValid.requiredFields(req.body, [

@@ -1,6 +1,6 @@
 
 import { tableMovies } from "../../components/tableMovies.js";
-import { getAllMoviesDraft } from "../../db/admin/getAllMovies.js";
+import { getAllMoviesDraft } from "../../db/admin/movies.js";
 import { AdminPageTemplate } from "../../templates/AdminPageTemplate.js";
 
 export class PageAdminMoviesDraft extends AdminPageTemplate {
