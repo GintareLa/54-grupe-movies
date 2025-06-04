@@ -12,7 +12,24 @@ const durationMinutesDOM = document.getElementById('duration_minutes');
 const categoryDOM = document.getElementById('category');
 
 if (imageFormDOM) {
+    imageFormDOM
+        .querySelector('input')
+        .addEventListener('change', (e) => {
+            const formData = new FormData();
+            formData.append('thumbnail', e.target.files[0]);
 
+            fetch('/api/admin/upload', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        imageDOM.src = data.msg;
+                    }
+                })
+                .catch(console.error);
+        });
 }
 
 if (contentFormDOM) {
@@ -34,8 +51,8 @@ if (contentFormDOM) {
         if (+durationMinutesDOM.value) {
             data.minutes = +durationMinutesDOM.value;
         }
-        if (categoryDOM.value) {
-            data.category = categoryDOM.value;
+        if (+categoryDOM.value) {
+            data.category = +categoryDOM.value;
         }
 
         const imageURL = new URL(imageDOM.src);
