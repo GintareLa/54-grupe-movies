@@ -24,8 +24,9 @@ if (formDOM) {
         })
             .then(data => data.json())
             .then(data => {
-
-                console.log(data);
+                if (data.status === 'success') {
+                    location.href = '/admin/categories';
+                }
             })
             .catch(err => console.log(err));
     });

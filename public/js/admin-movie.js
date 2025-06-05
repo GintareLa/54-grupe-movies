@@ -70,6 +70,9 @@ if (contentFormDOM) {
         })
             .then(data => data.json())
             .then(data => {
+                 if ( data.status === 'success') {
+                    location.href = '/admin/movies';
+                }
                 console.log(data);
             })
             .catch(err => console.log(err));
