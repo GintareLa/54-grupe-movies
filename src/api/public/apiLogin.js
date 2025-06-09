@@ -1,5 +1,6 @@
 
 import { connection } from "../../db.js";
+import { hash } from "../../lib/hash.js";
 import { IsValid } from "../../lib/IsValid.js";
 import { randomString } from "../../lib/randomString.js";
 
@@ -19,9 +20,18 @@ export async function apiLogin(req, res) {
     const { email, password } = req.body;
     let userObj = null;
 
+    const hashedPassword = hash(password);
+
+    if (hashedPassword === '') {
+        return res.json({
+            status: 'error',
+            msg: 'Netinkamas slaptazodis',
+        });
+    }
+
     try {
-        const sql = 'SELECT * FROM users WHERE email = ? AND password = ?;';
-        const [result] = await connection.query(sql, [email, password]);
+        const sql = 'SELECT * FROM users WHERE email = ? AND password_hash = ?;';
+        const [result] = await connection.execute(sql, [email, hashedPassword]);
 
         if (result.length === 0) {
             return res.json({
@@ -43,7 +53,7 @@ export async function apiLogin(req, res) {
 
     try {
         const sql = 'INSERT INTO tokens (text, user_id) VALUES (?, ?);';
-        const [result] = await connection.query(sql, [loginToken, userObj.id]);
+        const [result] = await connection.execute(sql, [loginToken, userObj.id]);
 
         if (result.affectedRows !== 1) {
             return res.json({
